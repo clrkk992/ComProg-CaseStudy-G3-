@@ -1,0 +1,9 @@
+ABC, Julian's Chronicles, Kean, Adventure, true
+GHI, Mars And Charles and julia, Taylor, Documentary, false
+DEF, Dalawa ang Daddy, Owen, Fiction, true
+GHL, Tatlo ang itlog ni Julian, Michael, Reality Show, false
+ABD, Ang ahas, Mary, Mystery, true
+Gh2, Unconditionally, Maragret Poppy, Romance, true
+AKD, Sun Eater, Apollo, Adventure, false
+a, a, a, a, true
+b, b, b, b, true
