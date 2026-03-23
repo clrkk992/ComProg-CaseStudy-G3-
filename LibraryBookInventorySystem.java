@@ -43,9 +43,9 @@ class LibraryBookInventorySystem {
                 case 3:  addRecord(); break;
                 case 4:  editRecord(); break;
                 case 5:  deleteRecord(); break;
-                case 6:  System.out.println("Thank you for using the E-library Service! Come back again!"); System.exit(0); break;
+                case 6:  System.out.println("\nThank you for using the E-library Service! Come back again!"); System.exit(0); break;
                 default:
-                    if (error != true)
+                    if (!error)
                         System.out.println("\nEnter a correct choice (1-6)");
             } 
         } while(choice < 1 || choice > 6 || error == true);
@@ -115,7 +115,7 @@ class LibraryBookInventorySystem {
                     case 3: searchAuthor(); break; 
                     case 4: searching = false; break; 
                     default:
-                        if (error != true)
+                        if (!error)
                             System.out.println("\nEnter a correct choice (1-6)");
                 }
             } while(error);
@@ -288,30 +288,18 @@ class LibraryBookInventorySystem {
 
                 // Confirmation
                 char save = 'Y';
-                boolean error;
                 do {
-                    do {
-                        error = false;
-                        try {
-                            System.out.print("\nSAVE the record? (Y/N): ");
-                            save = input.next().charAt(0);
-                            save = Character.toUpperCase(save);
-                        } catch(InputMismatchException e) {
-                            System.out.println("Enter only Y/N");
-                            error = true;
-                            input.nextLine();
-                        }
-                    } while (error); // makes sure that the input is only Y or N
+                    save = errorConfirmation("SAVE the record?");
 
                     switch (save) {
                         case 'Y': {
                             BookConstructor newbook = new BookConstructor(ISBN, title, author, genre, availability);
                             Books.add(newbook);
                             fw.write(newbook.displayBook() + "\n");
-                            System.out.println("\nRecord succesfully added.\n"); 
+                            System.out.println("\nRecord succesfully added."); 
                             break;
                         }
-                        case 'N': System.out.println("\nRecord addition cancelled.\n"); break;
+                        case 'N': System.out.println("\nRecord addition cancelled."); break;
                         default: System.out.println("\nEnter a correct choice (Y/N)");
                     }
                 } while (save != 'Y' && save != 'N');
@@ -323,14 +311,7 @@ class LibraryBookInventorySystem {
                 System.out.println("Error Adding Record");
             }
 
-            try {
-                System.out.print("Add another record? (Y/N): ");
-                choice = input.next().charAt(0);
-                choice = Character.toUpperCase(choice);
-                input.nextLine();
-            } catch (InputMismatchException e) {
-                System.out.println("Enter only Y/N");
-            } 
+            choice = errorConfirmation("Add another record?");
 
             System.out.println();
 
@@ -387,20 +368,8 @@ class LibraryBookInventorySystem {
 
             // Confirmation
             char save = 'Y';
-            boolean error;
             do {
-                do {
-                    error = false;
-                    try {
-                        System.out.print("\nSAVE the changes? (Y/N): ");
-                        save = input.next().charAt(0);
-                        save = Character.toUpperCase(save);
-                    } catch(InputMismatchException e) {
-                        System.out.println("Enter only Y/N");
-                        error = true;
-                        input.nextLine();
-                    }
-                } while (error); // makes sure that the input is only Y or N
+                save = errorConfirmation("SAVE the changes?");
 
                 switch (save) {
                     case 'Y': {
@@ -453,33 +422,21 @@ class LibraryBookInventorySystem {
             bw.close();
 
             // Confirmation
-            char save = 'Y';
-            boolean error;
+            char delete = 'Y';
             do {
-                do {
-                    error = false;
-                    try {
-                        System.out.print("\nDELETE this record? (Y/N): ");
-                        save = input.next().charAt(0);
-                        save = Character.toUpperCase(save);
-                    } catch(InputMismatchException e) {
-                        System.out.println("Enter only Y/N");
-                        error = true;
-                        input.nextLine();
-                    }
-                } while (error); // makes sure that the input is only Y or N
+                delete = errorConfirmation("DELETE this record?");
 
-                switch (save) {
+                switch (delete) {
                     case 'Y': {
                         inputFile.delete();
                         tempFile.renameTo(inputFile);
                         System.out.println("\nRecord succesfully deleted.\n"); 
                         break;
                     }
-                    case 'N': tempFile.delete(); System.out.println("\nRecord edit cancelled.\n"); break;
+                    case 'N': tempFile.delete(); System.out.println("\nRecord deleting cancelled.\n"); break;
                     default: System.out.println("\nEnter a correct choice (Y/N)");
                 }
-            } while (save != 'Y' && save != 'N');
+            } while (delete != 'Y' && delete != 'N');
 
         } catch (IOException e) {
             System.out.println("Error deleting record");
@@ -586,5 +543,25 @@ class LibraryBookInventorySystem {
         } while(error);
 
         return availability;
+    }
+
+    static char errorConfirmation(String text) { // makes sure that the input is only Y or N
+        char choice = 'Y';
+        boolean error;
+        
+        do {
+            error = false;
+            try {
+                System.out.print(text + " (Y/N): ");
+                choice = input.next().charAt(0);
+                choice = Character.toUpperCase(choice);
+            } catch(InputMismatchException e) {
+                System.out.println("Enter only Y/N");
+                error = true;
+                input.nextLine();
+            }
+        } while (error); 
+
+        return choice;
     }
 }
